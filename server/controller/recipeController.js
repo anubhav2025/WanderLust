@@ -73,7 +73,37 @@ exports.searchBlog = async(req, res) => {
     }
 }
 
+/* 
+* GET /explore-latest
+* explore latest
+*/
+exports.exploreLatest = async(req, res) => {
+    try{
+        const limitNumber = 20;
+        const blog = await Blog.find({}).sort({ _id: -1 }).limit(limitNumber);
+        res.render('explore-latest', {title: 'Cooking Blog - Explore Latest', blog});
+    }
+    catch(error){
+        res.status(500).send({message: error.message || "Error Occured"});
+    }
+}
 
+
+/* 
+* GET /explore-random
+* explore random
+*/
+exports.exploreRandom = async(req, res) => {
+    try{
+        const count = await Blog.find().countDocuments();
+        const random = Math.floor(Math.random() * count);
+        let blog = await Blog.findOne().skip(random).exec();
+        res.render('explore-random', {title: 'Cooking Blog - Explore Latest', blog});
+    }
+    catch(error){
+        res.status(500).send({message: error.message || "Error Occured"});
+    }
+}
 
 
 
