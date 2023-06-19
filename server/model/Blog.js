@@ -28,5 +28,9 @@ const blogSchema = new mongoose.Schema({
     },
 });
 
+blogSchema.index({name: 'text', description: 'text'});
+//wildcard indexing
+//blogSchema.index({ "$**": 'text' })
+
 module.exports = mongoose.model('Blog', blogSchema); //Blogs is collection name
 

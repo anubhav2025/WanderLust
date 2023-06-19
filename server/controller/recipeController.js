@@ -42,7 +42,6 @@ exports.exploreCategories = async(req, res) => {
 }
 
 
-
 /* 
 * GET /categories/:id
 * Categories By Id
@@ -56,6 +55,21 @@ exports.exploreCategoriesById = async(req, res) => {
     }
     catch(error){
         res.status(500).send({message: error.message || "Error Occured"});
+    }
+}
+
+
+/* 
+* POST /search
+* Search
+*/
+exports.searchBlog = async(req, res) => {
+
+    try {
+        let searchTerm = req.body.searchTerm;
+        let blog = await Blog.find( { $text: { $search: searchTerm, $diacriticSensitive: true } });
+        res.render('search', {title: 'Travel Blog - Search', blog});
+    } catch (error) {    
     }
 }
 
