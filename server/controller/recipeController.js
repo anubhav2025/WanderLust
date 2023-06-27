@@ -34,7 +34,7 @@ exports.exploreCategories = async(req, res) => {
     try{
         const limitNumber = 20;
         const categories = await Category.find({}).limit(limitNumber);
-        res.render('categories', {title: 'Cooking Blog - Categories', categories});
+        res.render('categories', {title: 'travel Blog - Categories', categories});
     }
     catch(error){
         res.status(500).send({message: error.message || "Error Occured"});
@@ -51,7 +51,7 @@ exports.exploreCategoriesById = async(req, res) => {
         let categoryId = req.params.id;
         const limitNumber = 20;
         const categoryById = await Blog.find({ 'category': categoryId }).limit(limitNumber);
-        res.render('categories', {title: 'Cooking Blog - Categories', categoryById});
+        res.render('categories', {title: 'Travel Blog - Categories', categoryById});
     }
     catch(error){
         res.status(500).send({message: error.message || "Error Occured"});
@@ -81,7 +81,7 @@ exports.exploreLatest = async(req, res) => {
     try{
         const limitNumber = 20;
         const blog = await Blog.find({}).sort({ _id: -1 }).limit(limitNumber);
-        res.render('explore-latest', {title: 'Cooking Blog - Explore Latest', blog});
+        res.render('explore-latest', {title: 'Travel Blog - Explore Latest', blog});
     }
     catch(error){
         res.status(500).send({message: error.message || "Error Occured"});
@@ -98,7 +98,7 @@ exports.exploreRandom = async(req, res) => {
         const count = await Blog.find().countDocuments();
         const random = Math.floor(Math.random() * count);
         let blog = await Blog.findOne().skip(random).exec();
-        res.render('explore-random', {title: 'Cooking Blog - Explore Latest', blog});
+        res.render('explore-random', {title: 'Travel Blog - Explore Latest', blog});
     }
     catch(error){
         res.status(500).send({message: error.message || "Error Occured"});
