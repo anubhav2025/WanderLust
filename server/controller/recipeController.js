@@ -18,7 +18,7 @@ exports.homePage = async(req, res) => {
 
         const travelBlogs = { latest, indian, italian, japanese };
 
-        res.render('index', {title: 'Cooking Blog - Home', categories, travelBlogs});
+        res.render('index', {title: 'Travelling Blog - Home', categories, travelBlogs});
     }
     catch(error){
         res.status(500).send({message: error.message || "Error Occured"});
@@ -125,6 +125,82 @@ exports.exploreBlog = async(req, res) => {
     }
 }
 
+
+
+/* 
+* GET /submit-blog
+* Submit page
+*/
+exports.submitBlog = async(req, res) => {
+    const infoErrorObj = req.flash('infoError');
+    const infoSubmitObj = req.flash('infoSubmit');
+    res.render('submit-blog', {title: 'Travel Blog - Submit Blog', infoErrorObj, infoSubmitObj});
+}
+
+
+/* 
+* Post /submit-blog
+* Submit page
+*/
+exports.submitBlogOnPost = async(req, res) => {
+
+    try {
+
+        let imageUploadFile;
+        let uploadPath;
+        let newImageName;
+
+        if(!req.files || Object.keys(req.files).length === 0){
+            console.log('No files were uploaded.');
+        }
+        else{
+            imageUploadFile = req.files.image;
+            newImageName = Date.now() + imageUploadFile.name;
+
+            uploadPath = require('path').resolve('./') + '/public/uploads/' + newImageName;
+
+            imageUploadFile.mv(uploadPath, function(err){
+                if(err) return res.status(500).send(err);
+            })
+        }
+
+        const newBlog = new Blog({
+            name: req.body.name,
+            email: req.body.email,
+            description: req.body.description,
+            category: req.body.category,
+            favouritefood: req.body.regionalFoods,
+            image: newImageName
+        })
+
+        await newBlog.save();
+
+        
+        req.flash('infoSubmit', 'Blog has been added');
+        res.redirect('/submit-blog');
+    } catch (error) {
+        req.flash('infoError', error);
+        res.redirect('/submit-blog');
+    }
+
+    
+}
+
+
+
+// async function deleteRecipe(){
+//     try {
+//         await Blog.deleteMany({
+//             [
+
+//             ]
+//         })
+//     } catch (error) {
+//         console.log(err);
+//     }
+// }
+
+// deleteRecipe();
 
 
 
